@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 env = environment.Environment()
 # env = gym.make('Pendulum-v0')
 
-MAX_EPISODES = 5000
+MAX_EPISODES = 1000
 MAX_STEPS = 100
 MAX_BUFFER = 100000
 #MAX_TOTAL_REWARD = 300
@@ -94,12 +94,6 @@ for _ep in range(MAX_EPISODES):
 		# print out information
 		# action = trainer.get_exploration_action(state)
 
-		# opponent action
-		# TODO: random agent
-		
-		# attr: self info
-
-
 		# # dont update if this is validation
 		# if _ep%50 == 0 or _ep>450:
 		# 	continue
@@ -108,7 +102,6 @@ for _ep in range(MAX_EPISODES):
 	gc.collect()
 	# process = psutil.Process(os.getpid())
 	# print(process.memory_info().rss)
-	rewards.append(total_reward)
 
 	print("Episode End")
 	if reward > 0:
@@ -116,8 +109,9 @@ for _ep in range(MAX_EPISODES):
 	elif env.u1 > env.u2 and reward <= 0:
 		neg_reward += 1
 
-	print("Positive: %d, Negative: %d"%(pos_reward, neg_reward))
+	rewards.append(pos_reward / (pos_reward + neg_reward))
 
+	print("Positive: %d, Negative: %d"%(pos_reward, neg_reward))
 	if _ep%100 == 0:
 		trainer.save_models(_ep)
 

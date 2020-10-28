@@ -54,7 +54,7 @@ class Environment:
         if act1 < self.bid2:
             # treat as leave
             obs = ([1, self.bid1, self.bid2])
-            reward = -10
+            reward = -100
             done = True
             return (obs, reward, done, max(self.bid1, self.bid2))
         self.bid1 = act1
