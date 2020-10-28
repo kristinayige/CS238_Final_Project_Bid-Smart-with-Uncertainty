@@ -20,7 +20,7 @@ class Environment:
                     - Trun_Gauss:   when the reward is given as above, except
                                     using Truncated Gaussian
     """
-    def __init__(self, u1, u2, p, t=None):
+    def __init__(self, p=500, u1=100, u2=50, t=None):
         self.p = p
         self.u1 = u1
         self.u2 = u2
@@ -28,6 +28,10 @@ class Environment:
         self.bid1 = 0    # initialize current bid
         self.bid2 = 0
         self.status = True
+
+    def set_utility(self, u1, u2):
+        self.u1 = u1
+        self.u2 = u2
 
     # this step function has a time lag: when action is input, it will
     # return the reward for the opponent and the new observation
@@ -37,9 +41,9 @@ class Environment:
         # if status is done, 0 reward and ceased
         if not self.status:
             obs = ([1, self.bid1, self.bid2])
-            reward = -100
+            reward = -2
             done = True
-            return (obs, reward, done)
+            return (obs, reward, done, max(self.bid1, self.bid2))
         # otherwise
         if self.type is None:
             return self.interact_update(act1, act2, idx)
@@ -50,9 +54,9 @@ class Environment:
         if act1 < self.bid2:
             # treat as leave
             obs = ([1, self.bid1, self.bid2])
-            reward = -100
+            reward = -10
             done = True
-            return (obs, reward, done)
+            return (obs, reward, done, max(self.bid1, self.bid2))
         self.bid1 = act1
         # since in this case only one agent, we stochastically smapled agent 2's bid
         act2 = uniform.rvs() * (self.u2 - self.bid2) + self.bid2
@@ -61,7 +65,7 @@ class Environment:
             obs = ([1, self.bid1, self.bid2])
             reward = self.u1 - self.bid1
             done = True
-            return (obs, reward, done)
+            return (obs, reward, done, max(self.bid1, self.bid2))
         self.bid2 = act2
         obs = ([0, self.bid1, self.bid2])
         prob_win = 1 - (truncnorm.cdf(self.bid2, self.u1) / truncnorm.cdf(self.bid2, self.p))
@@ -70,7 +74,7 @@ class Environment:
         else:
             reward = (1 - prob_win) * -100
 
-        return (obs, reward, False)
+        return (obs, reward, False, max(self.bid1, self.bid2))
 
     def interact_update(self, act1, act2, idx=1):
         if idx == 1:
@@ -82,12 +86,12 @@ class Environment:
                 self.status = False # end the auction
                 # we need to also update the result to the first
                 # agent, so not done yet
-                return (obs, reward, False)
+                return (obs, reward, True, max(self.bid1, self.bid2))
             else:
                 self.bid1 = act1
                 obs = ([0, self.bid1, self.bid2])
                 reward = -1 # as game not ended yet, negative reward for time spent
-                return (obs, reward, False)
+                return (obs, reward, False, max(self.bid1, self.bid2))
         else:
             if act2 < self.bid1:
                 obs = ([1, self.bid1, self.bid2])
@@ -95,13 +99,13 @@ class Environment:
                 self.status = False # end the auction
                 # we need to also update the result to the first
                 # agent, so not done yet
-                return (obs, reward, False)
+                return (obs, reward, True, max(self.bid1, self.bid2))
             else:
                 self.bid2 = act2
                 obs = ([0, self.bid1, self.bid2])
                 reward = -1 # as game not ended yet, negative reward for time spent
                 # prob_win = truncnorm.cdf(self.bid)
-                return (obs, reward, False)
+                return (obs, reward, False, max(self.bid1, self.bid2))
 
     def reset(self, u1, u2):
         self.u1 = u1
@@ -111,4 +115,4 @@ class Environment:
         self.status = True
 
         # observatin contains three component: (my_bid_value, opponent_bid_value, status)
-        return ([0, self.bid1, self.bid2])
+        return ([0, self.bid1, self.bid2], 0)
