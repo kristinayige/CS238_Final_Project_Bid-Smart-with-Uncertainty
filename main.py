@@ -3,7 +3,6 @@ import numpy as np
 import torch
 from torch.autograd import Variable
 import os
-import psutil
 import environment
 import gc
 import agent
@@ -16,7 +15,7 @@ import matplotlib.pyplot as plt
 env = environment.Environment()
 # env = gym.make('Pendulum-v0')
 
-MAX_EPISODES = 1000
+MAX_EPISODES = 2500
 MAX_STEPS = 100
 MAX_BUFFER = 100000
 #MAX_TOTAL_REWARD = 300
@@ -36,17 +35,20 @@ u1 = 100
 pos_reward = 0
 neg_reward = 0
 rewards = []
+ratios = []
+indexes = []
 
 for _ep in range(MAX_EPISODES):
 	print ('EPISODE :- ' + str(_ep))
 	random_agent = agent.Agent()
 	u2 = random_agent.utility
 	print("Random Player utility: %f"%u2)
+	print(u1,u2)
 	observation, cur_bid = env.reset(u1, u2)
 	bid1 = 0
 	bid2 = 0
 	total_reward = 0
-	for r in range(MAX_STEPS):
+	for index in range(MAX_STEPS):
 		state = np.float32(observation)
 		# random action interaction
 		print("=================Random Agent Turn=================")
@@ -72,6 +74,7 @@ for _ep in range(MAX_EPISODES):
 
 		# perform optimization
 		if done:
+			indexes.append(index)
 			break
 
 		# AC agent interaction
@@ -79,11 +82,11 @@ for _ep in range(MAX_EPISODES):
 		#TODO: check
 		if _ep%5 == 0:
 			# validate every 5th episode
-			action = trainer.get_exploitation_action(state)
+			action = trainer.get_exploration_action(state)
 			print("Exploit action: %f"%action)
 		else:
 			# get action based on observation, use exploration policy here
-			action = trainer.get_exploration_action(state)
+			action = trainer.get_exploitation_action(state)
 			print("Explore action: %f"%action)
 
 		print("Action taken: %f"%action)
@@ -102,21 +105,44 @@ for _ep in range(MAX_EPISODES):
 	gc.collect()
 	# process = psutil.Process(os.getpid())
 	# print(process.memory_info().rss)
-
+	rewards.append(total_reward)
 	print("Episode End")
-	if reward > 0:
+	if total_reward > 0:
 		pos_reward += 1
-	elif env.u1 > env.u2 and reward <= 0:
+	elif env.u1 > env.u2 and total_reward <= 0:
 		neg_reward += 1
+	if (pos_reward + neg_reward) != 0:
+		ratios.append(pos_reward / (pos_reward + neg_reward))
 
-	rewards.append(pos_reward / (pos_reward + neg_reward))
+	# rewards.append(pos_reward / (pos_reward + neg_reward))
 
 	print("Positive: %d, Negative: %d"%(pos_reward, neg_reward))
 	if _ep%100 == 0:
 		trainer.save_models(_ep)
 
 #print(rewards)
+plt.figure()
 print ('Completed episodes')
 print("Positive Reward Porpotion: %f"%(pos_reward / (pos_reward + neg_reward)))
+plt.xlabel("Epoch")
+plt.ylabel("Ratio of positive reward")
+plt.plot(np.array(ratios), '--')
+plt.savefig("ratios.png")
+
+sumed = np.add.reduceat(rewards, np.arange(0, len(rewards), 10))/10
+
+plt.figure()
+plt.xlabel("Index of bin (bin size = 1/10)")
+plt.ylabel("Reward ($)")
+plt.plot(np.array(sumed), '--')
+plt.savefig("sumed.png")
+
+plt.figure()
+plt.plot(np.array(indexes), '--')
+plt.savefig("index.png")
+
+plt.figure()
+plt.xlabel("Epoch")
+plt.ylabel("Reward ($)")
 plt.plot(np.array(rewards), '--')
-plt.show()
+plt.savefig("rawards.png")

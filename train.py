@@ -10,6 +10,8 @@ import math
 import utils
 import model
 
+from scipy.stats import uniform
+
 BATCH_SIZE = 128
 LEARNING_RATE = 0.001
 GAMMA = 0.99
@@ -65,8 +67,7 @@ class Trainer:
 		action = self.actor.forward(state).detach()
 		print("Before exploration")
 		print(action)
-		new_action = action.data.numpy() + 0.5*((self.noise.sample() * (self.action_lim - action.item())) / 2 + (self.action_lim - action.item()) / 2)
-		print("After exploration")
+		new_action = action.data.numpy() + uniform.rvs() * 10
 		print(new_action)
 		return new_action
 
