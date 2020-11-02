@@ -27,7 +27,7 @@ The discrete approach runs for __25000__ iterations in order to converge to an o
 
 Porprotion of positive rewards             |  Numric Reward Trend
 :-----------------------------------------:|:-------------------------:
-![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png)  |  ![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png)
+![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png) =250x250  |  ![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png) =250x250
 
 ### Continuous
 The detail implementation of the continuous algorithm is put in the __continuous.py__ python file.
