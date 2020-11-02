@@ -24,8 +24,10 @@ The detail implementation of the discrete algorithm is put in the __discrete.py_
 We measure the discrete approach using the following two ways: first, porprotion of positive rewards(i.e. using a bid price less than actual utility and takes steps as minimum as possible) over the total number of situations that the agent's utility is actually larger than its opponent; second, the numeric reward value when the agent's utility is indeed larger than its opponent. 
 
 The discrete approach runs for __25000__ iterations in order to converge to an optimal strategy. Below are the two plots for the abovementioned metrics.
-![Porprotion of positive rewards](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png)
-![Numeric Rewards against Iterations](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png)
+
+Porprotion of positive rewards             |  Numric Reward Trend
+:-----------------------------------------:|:-------------------------:
+![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png)  |  ![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png" width="100)
 
 ### Continuous
 The detail implementation of the continuous algorithm is put in the __continuous.py__ python file.
