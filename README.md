@@ -11,9 +11,12 @@ The environment serves as an interactive center to offer feedbacks to both agent
 For discrete approach, the reward along the auction is 0. Since our group aims to model realisitic auction scenario as much as possible, time step (measured in terms of number of times bidding) is taken into account when computing the reward. This measurement is to encourage the agent to not always add up only a small fraction amount of time, which is not considered a good bidding strategy, and also model the time committment that real individual spent on bidding a product.
 For continuous case, similar idea is offered, except that due to the potential long time step, our group discounts the reward by time step.
 
-## Discrete
+## Approach
+### Discrete
 The detail implementation of the discrete algorithm is put in the __discrete.py__ python file.
+We measure the discrete approach using the following two ways: first, porprotion of positive rewards(i.e. using a bid price less than actual utility and takes steps as minimum as possible) over the total number of situations that the agent's utility is actually larger than its opponent; second, the numeric reward value when the agent's utility is indeed larger than its opponent. 
+The discrete approach runs for __25000__ iterations in order to converge to an optimal strategy. Below are the two plots for the abovementioned metrics.
 
-## Continuous
+### Continuous
 The detail implementation of the continuous algorithm is put in the __continuous.py__ python file.
 
