@@ -25,7 +25,9 @@ We measure the discrete approach using the following two ways: first, porprotion
 
 The discrete approach runs for __25000__ iterations in order to converge to an optimal strategy. Below are the two plots for the abovementioned metrics.
 
-![alt-text-1](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png "Positive Reward Porprotion") ![alt-text-2](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png "Numeric Reward Trend")
+label 1 | label 2
+--- | ---
+![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png "Positive Reward Porprotion") ![](https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png "Numeric Reward Trend")
 
 ### Continuous
 The detail implementation of the continuous algorithm is put in the __continuous.py__ python file.
