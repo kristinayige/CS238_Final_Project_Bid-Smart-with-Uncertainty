@@ -8,7 +8,7 @@ Two approaches are taken for this project - discrete and continuous ones.
 
 The discrete approach consults the Q-Learning algorithm and learn a Q-table by discretizing the bidding price for Xbox into $1 range, and learn the action-value function.
 
-The continuous approach consults the PyTorch implementation of continuous action actor-critic algorithm(https://github.com/vy007vikas/PyTorch-ActorCriticRL), which utilizes DeepMind's Deep Deterministic Policy Gradient [DDPG](https://arxiv.org/abs/1509.02971) method for updating the actor and critic networks. Our group adapts the algorithm to our setup.
+The continuous approach consults the PyTorch implementation of continuous action __actor-critic algorithm__ (https://github.com/vy007vikas/PyTorch-ActorCriticRL), which utilizes __DeepMind's Deep Deterministic Policy Gradient [DDPG]__ (https://arxiv.org/abs/1509.02971) method for updating the actor and critic networks. Our group adapts the algorithm to our setup.
 
 ## Environment
 The environment serves as an interactive center to offer feedbacks to both agents. Since auction state results are dependent on both agents' actions, the environment is implemented with a time lag such that when the second agent takes an action, the return state and reward is the one for the first agent. Detail explanation can be found in our report.
