@@ -26,10 +26,10 @@ We measure the discrete approach using the following two ways: first, porprotion
 The discrete approach runs for __25000__ iterations in order to converge to an optimal strategy. Below are the two plots for the abovementioned metrics.
 
 <p align="center">
-  <img width="300" height="300" src="https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png">
+  <img width="500" height="400" src="https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_ratio.png">
 </p>
 <p align="center">
-  <img width="300" height="300" src="https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png">
+  <img width="500" height="400" src="https://github.com/kristinayige/CS238_Final_Project/blob/main/discrete_rewards.png">
 </p>
 
 ### Continuous
