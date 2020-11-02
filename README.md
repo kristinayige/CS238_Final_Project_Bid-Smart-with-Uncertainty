@@ -1,56 +1,19 @@
-# PyTorch-ActorCriticRL
+# 238 Final Project
+Implementation to learn a bidding agent that tries to maximize its gain when attending an auction against another opponent, whose utility remains unknown and could only be inferred from the sequence of bids. In this project, our group focuses solely on auction for Xbox.
+The agent learn the strategy through simulation against human-like random agent, who bids a price in between the current bid and his/hers utility, with a possibility to leave the auction if the bid price comes too close to his/hers utility. If the bid price exceeds his/hers utility, then he/his will for sure leave the auction.
+Our group aims to learn an agent such that when the private utility is higher than that of the opponent, the agent will learn to bid a price that helps him win the product with lower price.
+Two approaches are taken for this project - discrete and continuous ones. 
+The discrete approach consults the Q-Learning algorithm and learn a Q-table by discretizing the bidding price for Xbox into $1 range, and learn the action-value function.
+The continuous approach consults the PyTorch implementation of continuous action actor-critic algorithm(https://github.com/vy007vikas/PyTorch-ActorCriticRL), which utilizes DeepMind's Deep Deterministic Policy Gradient [DDPG](https://arxiv.org/abs/1509.02971) method for updating the actor and critic networks. Our group adapts the algorithm to our setup.
 
-PyTorch implementation of continuous action actor-critic algorithm. The algorithm uses DeepMind's Deep Deterministic Policy Gradient [DDPG](https://arxiv.org/abs/1509.02971) method for updating the actor and critic networks along with [Ornstein–Uhlenbeck](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process) process for exploring in continuous action space while using a Deterministic policy.
+## Environment
+The environment serves as an interactive center to offer feedbacks to both agents. Since auction state results are dependent on both agents' actions, the environment is implemented with a time lag such that when the second agent takes an action, the return state and reward is the one for the first agent. Detail explanation can be found in our report.
+For discrete approach, the reward along the auction is 0. Since our group aims to model realisitic auction scenario as much as possible, time step (measured in terms of number of times bidding) is taken into account when computing the reward. This measurement is to encourage the agent to not always add up only a small fraction amount of time, which is not considered a good bidding strategy, and also model the time committment that real individual spent on bidding a product.
+For continuous case, similar idea is offered, except that due to the potential long time step, our group discounts the reward by time step.
 
-## DDPG
+## Discrete
+The detail implementation of the discrete algorithm is put in the __discrete.py__ python file.
 
-[DDPG](https://arxiv.org/abs/1509.02971) is a policy gradient alogrithm, that uses stochastic behaviour policy for exploration (Ornstein-Uhlenbeck in this case) and outputs a deterministic target policy, which is easier to learn.
-
-### Policy Estimation (Actor)
-
-Actor Network consists of a 3-layer neural network taking into input the state (s) and outputs the action (a) which should be taken denoted by *Pi(s)*.
-
-### Policy Evaluation (Critic)
-
-Critic Network consists of a 3-layer neural network taking into input the state (s) and correspoding action (a) and outputs the state-action value function denoted by __*Q(s,a)*__.
-
-### Actor Optimization
-
-The policy is optimized by minimizing the loss :-  __*sum ( -Q(s,a) )*__.
-
-### Critic Optimization
-
-The critic is optimized by minimzing the loss :- __*L2( r + gamma\*Q(s1,Pi(s)) - Q(s,a) )*__.
-
-### Soft Updates
-
-The above updates however don't tend to converge according to DeepMind's paper and they hence use soft policy updates by maintaing a target actor and critic whose weights are updated after above optimizations as follows :-
-
-```
-target_actor = beta*actor + (1-beta)*target_actor
-target_critic = beta*critic + (1-beta)*target_critic
-```
-
-where beta = 0.001
-
-## Performance of DDPG on OpenAI Envs
-
-### Pendulum-v0
-
-Below is the performance of the model after 70 episodes. [Full Video](https://www.youtube.com/watch?v=feXeEG_KaYw)
-
-![Pendulum-v0](https://j.gifs.com/O71nqL.gif)
-
-### BiPedalWalker-v2
-
-Below is the performance of the model after 900 episodes. [Full Video](https://www.youtube.com/watch?v=-QU42vpBWIg)
-
-![BiPedalWalker-v2](https://j.gifs.com/r0Qx6k.gif)
-
-## References
-
-* [DDPG paper by DeepMind](https://arxiv.org/abs/1509.02971) - DeepMind's DDPG paper
-* [DDPG blog by penami4911](http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html) - A very nicely explained blog with code in Tensorflow 
-* [A3C paper by DeepMind](https://arxiv.org/abs/1602.01783) - DeepMind's A3C paper
-* [A3C blog by yanpanlau](https://yanpanlau.github.io/2016/10/11/Torcs-Keras.html) - A3C explained nicely along with  Ornstein-Uhlenbeck expoloration
+## Continuous
+The detail implementation of the continuous algorithm is put in the __continuous.py__ python file.
 
