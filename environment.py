@@ -55,16 +55,13 @@ class Environment:
                 if self.type == 1:
                     reward = math.pow(0.99, self.time) * (self.u2 - self.bid2)
                 else:
-                    reward = (self.u2 - self.bid2) - self.time
+                    reward = (self.u2 - self.bid2)
                 self.status = False
                 return (obs, reward, True, max(self.bid1, self.bid2))
             else:
                 self.bid1 = act1
                 obs = ([0, self.bid1, self.bid2])
-                if self.type == 1:
-                    reward = -1 
-                else:
-                    reward = 0
+                reward = -1
                 return (obs, reward, False, max(self.bid1, self.bid2))
         else:
             if act2 <= self.bid1:
@@ -72,16 +69,13 @@ class Environment:
                 if self.type == 1:
                     reward = math.pow(0.99, self.time) * (self.u1 - self.bid1)
                 else:
-                    reward = (self.u1 - self.bid1) - self.time
+                    reward = (self.u1 - self.bid1)
                 self.status = False
                 return (obs, reward, True, max(self.bid1, self.bid2))
             else:
                 self.bid2 = act2
                 obs = ([self.time, self.bid2])
-                if self.type == 1:
-                    reward = -1 
-                else:
-                    reward = 0
+                reward = -1
                 return (obs, reward, False, max(self.bid1, self.bid2))
 
     def reset(self, u1, u2):
